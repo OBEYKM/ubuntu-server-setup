@@ -249,4 +249,65 @@ events{
 
 > ⚠️ after updating nginx.conf file you might notice no change, well this because we need to reload nginx with this new configuration  ``` sudo nginx -s reload ``` . If the no change has happened restart nginx ``` sudo systemctl restart nginx ``` .
 
+## Error that you might find when updating nginx files 
 
+### If you are facing this type of error : 
+
+> to see erros run ```journalctl -xeu nginx.service``` 
+
+```nano
+░░ The job identifier is 5264 and the job result is failed.
+Mar 19 10:01:44 kali systemd[1]: Starting nginx.service - A high performance web server and a reverse proxy server...
+░░ Subject: A start job for unit nginx.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit nginx.service has begun execution.
+░░ 
+░░ The job identifier is 5366.
+Mar 19 10:01:44 kali nginx[8171]: nginx: [emerg] bind() to 0.0.0.0:8080 failed (98: Address already in use)
+Mar 19 10:01:45 kali nginx[8171]: nginx: [emerg] bind() to 0.0.0.0:8080 failed (98: Address already in use)
+Mar 19 10:01:45 kali nginx[8171]: nginx: [emerg] bind() to 0.0.0.0:8080 failed (98: Address already in use)
+Mar 19 10:01:46 kali nginx[8171]: nginx: [emerg] bind() to 0.0.0.0:8080 failed (98: Address already in use)
+Mar 19 10:01:46 kali nginx[8171]: nginx: [emerg] bind() to 0.0.0.0:8080 failed (98: Address already in use)
+Mar 19 10:01:47 kali nginx[8171]: nginx: [emerg] still could not bind()
+Mar 19 10:01:47 kali systemd[1]: nginx.service: Control process exited, code=exited, status=1/FAILURE
+░░ Subject: Unit process exited
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ An ExecStart= process belonging to unit nginx.service has exited.
+░░ 
+░░ The process' exit code is 'exited' and its exit status is 1.
+Mar 19 10:01:47 kali systemd[1]: nginx.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ The unit nginx.service has entered the 'failed' state with result 'exit-code'.
+Mar 19 10:01:47 kali systemd[1]: Failed to start nginx.service - A high performance web server and a reverse proxy server.
+░░ Subject: A start job for unit nginx.service has failed
+░░ Defined-By: systemd
+░░ Support: https://www.debian.org/support
+░░ 
+░░ A start job for unit nginx.service has finished with a failure.
+░░ 
+░░ The job identifier is 5366 and the job result is failed.
+
+```
+
+if you see similar error indicates that nginx is failing to start because it is unable to bind to port 8080, as that port is already in use by another process.
+
+1. ***Check which process is using port 8080***
+
+You need to find out which process is occupying port 8080. You can do this with the lsof or netstat command.
+
+```bash
+sudo lsof -i :8080
+
+```
+ > you might see similiar to this :  
+|COMMAND | PID  | USER |  FD  |  TYPE  | DEVICE |  SIZE/OFF  | NODE  | NAME                | 
+|--------|------|------|------|--------|--------|------------|-------|---------------------|
+|nginx   | 7649 | dev  |  6u  |  IPv4  | 110551 |       0t0  |  TCP  | *:http-alt (LISTEN) |
+|nginx   | 7650 | dev  |  6u  |  IPv4  | 110551 |       0t0  |  TCP  | *:http-alt (LISTEN) |
