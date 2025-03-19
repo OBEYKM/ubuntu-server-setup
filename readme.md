@@ -307,7 +307,13 @@ sudo lsof -i :8080
 
 ```
  > you might see similiar to this :  
+
 |COMMAND | PID  | USER |  FD  |  TYPE  | DEVICE |  SIZE/OFF  | NODE  | NAME                | 
 |--------|------|------|------|--------|--------|------------|-------|---------------------|
 |nginx   | 7649 | dev  |  6u  |  IPv4  | 110551 |       0t0  |  TCP  | *:http-alt (LISTEN) |
 |nginx   | 7650 | dev  |  6u  |  IPv4  | 110551 |       0t0  |  TCP  | *:http-alt (LISTEN) |
+
+
+
+
+
