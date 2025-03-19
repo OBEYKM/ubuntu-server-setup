@@ -1,5 +1,7 @@
 # DevJungle: Linux-Based Server Setup (Ubuntu)
 
+![Devjungle logo](DevJungle.webp)
+
 Welcome to **DevJungle**, where we **Code \~ Evolve \~ Thrive**! 🚀
 
 This guide will walk you through setting up an Nginx web server on a Linux-based OS (Ubuntu). Follow along step-by-step to get your server running smoothly!
