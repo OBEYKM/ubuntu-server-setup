@@ -314,6 +314,95 @@ sudo lsof -i :8080
 |nginx   | 7650 | dev  |  6u  |  IPv4  | 110551 |       0t0  |  TCP  | *:http-alt (LISTEN) |
 
 
+❗ ___If you find that nginx or another process is using port 8080, you can either stop that process or change the port nginx is trying to bind to.___
+
+
+2. ***Stop the conflicting process***
+
+If the port is being used by another process (such as another instance of nginx or some other service), you can stop it.
+
+For example, to stop the process using port 8080, find its PID and run:
+
+```bash
+sudo kill <PID>
+
+```
+Replace <PID> with the actual process ID from the output of lsof or netstat.
+
+3. ***Change the port in the Nginx configuration (optional)***
+
+If you don’t want to stop the other process and prefer to change the port nginx is trying to use, follow these steps:
+
+Open the nginx configuration file. The main configuration file is typically located at /etc/nginx/nginx.conf, but you might need to check other configuration files under /etc/nginx/sites-available/ or /etc/nginx/conf.d/ depending on your setup.
+Look for any references to 8080 and change them to another port (e.g., 8081 or 8000).
+After making changes, save the configuration file.
 
 
 
+4. ***Restart nginx***
+
+Once you’ve resolved the port conflict, restart nginx to apply the changes.
+
+```bash
+
+sudo systemctl restart nginx
+
+
+```
+
+5. ***Check for additional configuration issues***
+
+If nginx still fails to start, you can check the nginx logs or use the following command to get more detailed error information:
+
+```bash
+
+sudo nginx -t
+
+
+```
+
+
+6. ***Change the Port for Nginx***
+
+If you prefer not to stop the existing nginx process and would rather change the port nginx tries to bind to, you can edit the nginx configuration to use a different port.
+
+1. Open the nginx configuration file (usually /etc/nginx/nginx.conf or /etc/nginx/sites-available/default depending on your setup).
+Example:
+
+```bash
+
+sudo nano /etc/nginx/sites-available/default
+
+
+```
+2. Find the section where nginx binds to port 8080:
+
+```nano
+server {
+    listen 8080;
+    # Other configurations
+}
+
+```
+
+3. Change the port from 8080 to something else (e.g., 8081):
+
+```nano
+server {
+    listen 8081;
+    # Other configurations
+}
+
+```
+
+4. Save the file and exit the editor and Test the nginx configuration for errors:
+
+```bash
+
+sudo nginx -t
+
+
+```
+
+
+***_this should fix problem with ports 😊_*** 
